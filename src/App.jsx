@@ -8,7 +8,6 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage/>}></Route>
         <Route path="/auth" element={<AuthPage/>}></Route>
-
       </Routes>
     </>
   )
