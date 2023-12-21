@@ -79,14 +79,15 @@ const PostHeader = (props) => {
     )
 }
 const FeedPost = (props) => {
+
     return (
         <Box>
             <Box fontSize={12} bg="gray.800" borderRadius={5} mb={3}>
-                <PostHeader username={props.username} avatar={props.avatar}/>
+                <PostHeader username={props.username} avatar={props.avatar} />
                 <Box>
-                    <Image src={props.img} alt="postpic" borderRadius={5}/>
+                    <Image src={props.img} alt="postpic" borderRadius={5} />
                 </Box>
-                <PostFooter username={props.username}/>
+                <PostFooter username={props.username} />
             </Box>
             <Box>
                 <InputGroup>
@@ -96,7 +97,7 @@ const FeedPost = (props) => {
                         <Button
                             size='sm'
                             color="blue.500"
-                            _hover={{color: "white"}}
+                            _hover={{ color: "white" }}
                         >
                             <GoPaperAirplane />
                         </Button>
