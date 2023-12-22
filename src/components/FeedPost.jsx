@@ -82,7 +82,7 @@ const FeedPost = (props) => {
 
     return (
         <Box>
-            <Box fontSize={12} bg="gray.800" borderRadius={5} mb={3}>
+            <Box  bg="gray.800" borderRadius={5} mb={3}>
                 <PostHeader username={props.username} avatar={props.avatar} />
                 <Box>
                     <Image src={props.img} alt="postpic" borderRadius={5} />
