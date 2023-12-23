@@ -23,10 +23,10 @@ const SideBar = () => {
       icon: <Avatar
         size={'sm'}
         name="huyngse"
-        src="./assets/profilepic.png"
+        src="/assets/profilepic.png"
       />,
       text: "Profile",
-      link: "/huyngse",
+      link: "/u/huyngse",
     },
   ]
   return (
