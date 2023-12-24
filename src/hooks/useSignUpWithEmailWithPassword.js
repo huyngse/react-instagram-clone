@@ -1,6 +1,6 @@
 import { auth, firestore } from "../firebase/firebase";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc, where } from "firebase/firestore";
 import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
 const useSignUpWithEmailWithPassword = () => {
@@ -8,6 +8,7 @@ const useSignUpWithEmailWithPassword = () => {
     useCreateUserWithEmailAndPassword(auth);
   const showToast = useShowToast();
   const loginUser = useAuthStore((state) => state.login);
+  // CHECK IF ALL FIELDS IS FILLED
   const signup = async (inputs) => {
     if (
       !inputs.email ||
@@ -19,6 +20,15 @@ const useSignUpWithEmailWithPassword = () => {
       console.log("Please fill all the fields");
       return;
     }
+    // VALIDATE USERNAME USING FIRESTORE QUERY
+    const usersRef = collection(firestore, "users");
+    const q = query(usersRef, where("username", "==", inputs.username));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      showToast("Error", "Username already exists", "error");
+      return;
+    }
+    // TRY TO CREATE USER USING CUSTOM HOOK
     try {
       const newUser = await createUserWithEmailAndPassword(
         inputs.email,
