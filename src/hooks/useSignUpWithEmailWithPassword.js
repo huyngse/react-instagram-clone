@@ -38,6 +38,7 @@ const useSignUpWithEmailWithPassword = () => {
         showToast("Error", error.message, "error");
         return;
       }
+      // SAVE USER DOCUMENT TO FIRESTORE
       if (newUser) {
         const userDocument = {
           uid: newUser.user.uid,

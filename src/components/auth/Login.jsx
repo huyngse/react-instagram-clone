@@ -1,7 +1,8 @@
 import { Button, Input } from "@chakra-ui/react"
 import { useState } from "react";
-
+import useLogin from "../../hooks/useLogin";
 const Login = () => {
+    const { login, loading } = useLogin();
     const [inputs, setInputs] = useState({
         email: '',
         password: ''
@@ -40,6 +41,8 @@ const Login = () => {
                 w={'full'}
                 colorScheme='blue'
                 size={'sm'}
+                onClick={() => login(inputs)}
+                isLoading={loading}
             >
               Log in
             </Button>
