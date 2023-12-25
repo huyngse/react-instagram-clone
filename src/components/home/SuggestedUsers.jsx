@@ -7,19 +7,20 @@ const SuggestedUsers = () => {
   const { handleLogout, isLoggingOut } = useLogout();
   const authUser = useAuthStore(state => state.user);
   const Header = () => {
+    if (!authUser) return null; 
     return (
       <Flex justifyContent="space-between" alignItems="center" w="full" mb={5}>
         <Flex alignItems="center" gap={3}>
-          <Link to={authUser && `/u/${authUser.username}`} as={RouterLink}>
+          <Link to={`/u/${authUser.username}`} as={RouterLink}>
             <Avatar
-              src={authUser && authUser.profilePicURL}
+              src={authUser.profilePicURL}
               alt="profile picture"
               size="sm"
-              name={authUser && authUser.fullName}
+              name={authUser.fullName}
             />
           </Link>
-          <Link to={authUser && `/u/${authUser.username}`} as={RouterLink}>
-            <Text fontWeight="bold">{authUser && authUser.username}</Text>
+          <Link to={`/u/${authUser.username}`} as={RouterLink}>
+            <Text fontWeight="bold">{authUser.username}</Text>
           </Link>
         </Flex>
         <Button
