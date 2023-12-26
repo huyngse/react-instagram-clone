@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { collection, getDoc, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import useShowToast from "./useShowToast";
 import { firestore } from "../firebase/firebase";
 import useUserProfileStore from "../store/userProfileStore";
@@ -15,9 +15,10 @@ const useGetUserProfileByUsername = (props) => {
           collection(firestore, "users"),
           where("username", "==", props.username)
         );
-        const querySnap = await getDoc(q);
+        const querySnap = await getDocs(q);
         if (querySnap.empty) {
-          return setUserProfile(null);
+          setUserProfile(null);
+          return;
         }
         let userDoc;
         querySnap.forEach((doc) => {
@@ -26,6 +27,8 @@ const useGetUserProfileByUsername = (props) => {
         setUserProfile(userDoc);
       } catch (error) {
         showToast("Error", error.message, "error");
+      } finally {
+        setIsLoading(false);
       }
     };
     getUserProfile();
