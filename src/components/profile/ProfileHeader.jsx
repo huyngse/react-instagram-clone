@@ -1,6 +1,8 @@
 import { Avatar, AvatarGroup, Button, Flex, Text } from "@chakra-ui/react";
+import useUserProfileStore from "../../store/userProfileStore";
 
 const ProfileHeader = () => {
+    const { userProfile } = useUserProfileStore();
     return (
         <Flex
             my="50px"
@@ -14,9 +16,9 @@ const ProfileHeader = () => {
                 size={{ base: "xl", md: "2xl" }}
             >
                 <Avatar
-                    src='/assets/profilepic.png'
+                    src={userProfile.profilePicURL}
                     alt="profile picture"
-                    name="huyngse"
+                    name={userProfile.fullName}
                 />
             </AvatarGroup>
 
@@ -31,7 +33,7 @@ const ProfileHeader = () => {
                     flexDirection={{ base: "column", md: "row" }}
                     mb={2}
                 >
-                    <Text fontSize="25px">huyngse</Text>
+                    <Text fontSize="25px">{userProfile.username}</Text>
                     <Button
                         size="sm"
                         bg="white"
@@ -43,17 +45,17 @@ const ProfileHeader = () => {
                 </Flex>
                 <Flex gap={5}>
                     <div>
-                        <Text as="span" fontWeight="bold">4</Text> Posts
+                        <Text as="span" fontWeight="bold">{userProfile.posts.length}</Text> Posts
                     </div>
                     <div>
-                        <Text as="span" fontWeight="bold">149</Text> Followers
+                        <Text as="span" fontWeight="bold">{userProfile.followers.length}</Text> Followers
                     </div>
                     <div>
-                        <Text as="span" fontWeight="bold">168</Text> Following
+                        <Text as="span" fontWeight="bold">{userProfile.following.length}</Text> Following
                     </div>
                 </Flex>
-                <Text fontWeight="bold">HuyNG SE</Text>
-                <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit</Text>
+                <Text fontWeight="bold">{userProfile.fullName}</Text>
+                <Text>{userProfile.bio}</Text>
             </Flex>
         </Flex>
     )
