@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Flex, Link, Text, VStack } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import SuggestedUser from "./SuggestedUser";
+// import SuggestedUser from "./SuggestedUser";
 import useLogout from "../../hooks/useLogout";
 import useAuthStore from "../../store/authStore";
 const SuggestedUsers = () => {
@@ -56,7 +56,7 @@ const SuggestedUsers = () => {
         </Text>
       </Flex>
       <VStack w="full" mb={5} gap={5}>
-        <SuggestedUser
+        {/* <SuggestedUser
           name="Dan Abrahmov"
           followers={1392}
           avatar="https://bit.ly/dan-abramov"
@@ -70,7 +70,7 @@ const SuggestedUsers = () => {
           name="Christian Nwamba"
           followers={759}
           avatar="https://bit.ly/code-beast"
-        />
+        /> */}
       </VStack>
       <Footer />
     </VStack>

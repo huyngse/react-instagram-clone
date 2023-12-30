@@ -1,41 +1,45 @@
-import { Avatar, Box, Flex, Text } from "@chakra-ui/react"
-import { useState } from "react"
+import { Avatar, Button, Flex, Text } from "@chakra-ui/react"
+import useFollowUser from "../../hooks/useFollowUser";
+import useAuthStore from "../../store/authStore";
 
-const SuggestedUser = (props) => {
-  const [isFollowed, setIsFollowed] = useState(false);
-  const [followers, setFollower] = useState(props.followers);
-  const handleFollowClick = () => {
-    setIsFollowed(
-      (prev) => {
-        if (prev) {
-          setFollower(followers - 1);
-        } else {
-          setFollower(followers + 1);
-        }
-        return !prev;
-      }
-    );
-  };
+const SuggestedUser = ({ user, setUser }) => {
+  const { isUpdating, isFollowing, handleFollowUser } = useFollowUser(user.uid);
+  const authUser = useAuthStore(state => state.user);
+  const onFollowUser = async () => {
+    await handleFollowUser();
+    setUser({
+      ...user,
+      followers: isFollowing
+        ? user.followers.filter((uid) => uid !== authUser.uid)
+        : [...user.followers, authUser.uid]
+    })
+  }
   return (
     <Flex justifyContent="space-between" alignItems="center" w="full">
       <Flex alignItems="center" gap={3}>
-        <Avatar src={props.avatar} name={props.name} size="md" />
+        <Avatar src={user.profilePicURL} name={user.fullName} size="md" />
         <div>
-          <Text fontWeight="bold">{props.name}</Text>
-          <Text color="gray">{followers} followers</Text>
+          <Text fontWeight="bold">{user.fullName}</Text>
+          <Text color="gray">{user.followers.length} followers</Text>
         </div>
       </Flex>
+      {
+        authUser.uid !== user.uid && (
+          <Button
+            size="sm"
+            onClick={onFollowUser}
+            color="blue.500"
+            bg="transparent"
+            _hover={{ color: "white" }}
+            cursor="pointer"
+            fontWeight="medium"
+            isLoading={isUpdating}
+          >
+            {isFollowing ? "Unfollow" : "Follow"}
+          </Button>
+        )
+      }
 
-      <Box
-        size="sm"
-        onClick={handleFollowClick}
-        color="blue.500"
-        _hover={{color: "white"}}
-        cursor="pointer"
-        fontWeight="medium"
-      >
-        {isFollowed ? "Unfollow" : "Follow"}
-      </Box>
     </Flex>
   )
 }
