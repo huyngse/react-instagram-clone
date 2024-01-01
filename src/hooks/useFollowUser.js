@@ -40,12 +40,19 @@ const useFollowUser = (userId) => {
           following: authUser.following.filter((uid) => uid !== userId),
         });
         if (userProfile) {
-          setUserProfile({
-            ...userProfile,
-            followers: userProfile.followers.filter(
-              (uid) => uid !== authUser.uid
-            ),
-          });
+          if (userProfile.uid === authUser.uid) {
+            setUserProfile({
+              ...userProfile,
+              following: authUser.following.filter((uid) => uid !== userId),
+            });
+          } else {
+            setUserProfile({
+              ...userProfile,
+              followers: userProfile.followers.filter(
+                (uid) => uid !== authUser.uid
+              ),
+            });
+          }
         }
         localStorage.setItem(
           "userInfo",
@@ -62,10 +69,17 @@ const useFollowUser = (userId) => {
           following: [...authUser.following, userId],
         });
         if (userProfile) {
-          setUserProfile({
-            ...userProfile,
-            followers: [...userProfile.followers, authUser.uid],
-          });
+          if (userProfile.uid === authUser.uid) {
+            setUserProfile({
+              ...userProfile,
+              following: [...userProfile.following, userId],
+            });
+          } else {
+            setUserProfile({
+              ...userProfile,
+              followers: [...userProfile.followers, authUser.uid],
+            });
+          }
         }
         localStorage.setItem(
           "userInfo",
