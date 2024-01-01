@@ -3,11 +3,26 @@ import { CreatePostLogo } from "../../assets/constants";
 import { LuImagePlus } from "react-icons/lu";
 import { useRef, useState } from "react";
 import usePreviewImg from "../../hooks/usePreviewImg";
+import useShowToast from "../../hooks/useShowToast";
+import useCreatePost from "../../hooks/useCreatePost";
 const CreatePost = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [caption, setCaption] = useState("");
     const imageRef = useRef(null);
     const { selectedFile, handleImageChange, setSelectedFile } = usePreviewImg();
+    const { isLoading, handleCreatePost } = useCreatePost();
+    const showToast = useShowToast();
+
+    const handlePostCreation = async () => {
+        try {
+            await handleCreatePost(caption, selectedFile);
+            onClose();
+            setCaption("");
+            setSelectedFile(null);
+        } catch (error) {
+            showToast("Error", error.message, "error");
+        }
+    }
     return (
         <>
             <Tooltip
@@ -46,7 +61,7 @@ const CreatePost = () => {
                             value={caption}
                             onChange={(e) => setCaption(e.target.value)}
                         />
-                        <Input type="file" hidden ref={imageRef} onChange={handleImageChange}/>
+                        <Input type="file" hidden ref={imageRef} onChange={handleImageChange} />
                         {
                             selectedFile && (
                                 <Flex
@@ -79,13 +94,15 @@ const CreatePost = () => {
                                 />
                             </Button>
                         </Flex>
-
-                        {
-
-                        }
                     </ModalBody>
                     <ModalFooter>
-                        <Button mr={3}>Post</Button>
+                        <Button
+                            mr={3}
+                            onClick={handlePostCreation}
+                            isLoading={isLoading}
+                        >
+                            Post
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
@@ -94,3 +111,4 @@ const CreatePost = () => {
 }
 
 export default CreatePost;
+
