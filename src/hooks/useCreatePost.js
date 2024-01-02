@@ -33,7 +33,7 @@ function useCreatePost() {
       likes: [],
       comments: [],
       createdAt: Date.now(),
-      createBy: authUser.uid,
+      createdBy: authUser.uid,
     };
     try {
       const postDocRef = await addDoc(collection(firestore, "posts"), newPost);
