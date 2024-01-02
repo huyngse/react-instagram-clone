@@ -9,7 +9,13 @@ const usePostStore = create((set) => {
         };
       });
     },
-    // delete post
+    deletePost: (id) => {
+      set((prev) => {
+        return {
+          posts: prev.posts.filter(post => post.id !== id)
+        };
+      });
+    },
     // add comment
     setPosts: (posts) => {
       set({ posts });

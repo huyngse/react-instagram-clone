@@ -4,7 +4,7 @@ const useUserProfileStore = create((set) => {
   return {
     userProfile: null,
     setUserProfile: (userProfile) => set({ userProfile }),
-    addPost: (post) =>
+    addPost: (post) => {
       set((prev) => {
         return {
           userProfile: {
@@ -12,7 +12,15 @@ const useUserProfileStore = create((set) => {
             posts: [post.id, ...prev.userProfile.posts],
           },
         };
-      }),
+      });
+    },
+    deletePost: (postID) =>
+      set((prev) => ({
+        userProfile: {
+          ...prev.userProfile,
+          posts: prev.userProfile.posts.filter((id) => id !== postID),
+        },
+      })),
   };
 });
 

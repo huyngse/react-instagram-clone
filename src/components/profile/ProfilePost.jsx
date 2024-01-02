@@ -1,12 +1,45 @@
-import { Avatar, Box, Divider, Flex, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, VStack, useDisclosure } from "@chakra-ui/react"
+import { Avatar, Button, Divider, Flex, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, VStack, useDisclosure } from "@chakra-ui/react"
 import { FaComment, FaHeart } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import Comment from "../Comment";
 import PostFooter from "../home/PostFooter";
 import useUserProfileStore from "../../store/userProfileStore";
-const ProfilePost = ({post}) => {
+import useAuthStore from "../../store/authStore";
+import useShowToast from "../../hooks/useShowToast";
+import { useState } from "react";
+import { deleteObject, ref } from "firebase/storage";
+import { firestore, storage } from "../../firebase/firebase";
+import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import usePostStore from "../../store/postStore";
+const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const userProfile = useUserProfileStore(state => state.userProfile);
+  const authUser = useAuthStore(state => state.user);
+  const showToast = useShowToast();
+  const [isDeleting, setIsDeleting] = useState(false);
+  const deletePost = usePostStore(state => state.deletePost);
+  const deletePostFromProfile = useUserProfileStore(state => state.deletePost);
+  const handleDeletePost = async () => {
+    if (isDeleting) return;
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    setIsDeleting(true);
+    try {
+      const imageRef = ref(storage, `posts/${post.id}`);
+      await deleteObject(imageRef);
+      await deleteDoc(doc(firestore, "posts", post.id));
+      const userRef = doc(firestore, "users", authUser.uid);
+      await updateDoc(userRef, {
+        posts: arrayRemove(post.id)
+      });
+      deletePost(post.id);
+      deletePostFromProfile(post.id);
+      showToast("Success", "Post deleted successfully", "success");
+    } catch (error) {
+      showToast("Error", error.message, "error");
+    } finally {
+      setIsDeleting(false);
+    }
+  }
   const CustomModal = () => {
     const Header = () => {
       return (
@@ -22,19 +55,27 @@ const ProfilePost = ({post}) => {
               {userProfile.username}
             </Text>
           </Flex>
-          <Box
-            _hover={{
-              bg: "whiteAlpha.300", color: "red.600"
-            }}
-            borderRadius={4}
-            p={1}
-          >
-            <MdDelete cursor="pointer" size={20} />
-          </Box>
+          {/* DELETE BUTTON */}
+          {
+            userProfile?.uid === authUser.uid && (
+              <Button
+                size="small"
+                bg="transparent"
+                _hover={{
+                  bg: "whiteAlpha.300", color: "red.600"
+                }}
+                borderRadius={4}
+                p={1}
+                onClick={handleDeletePost}
+                isLoading={isDeleting}
+              >
+                <MdDelete cursor="pointer" size={20} />
+              </Button>
+            )
+          }
         </Flex>
       )
     }
-
     return (
       < Modal
         isOpen={isOpen}
@@ -93,7 +134,7 @@ const ProfilePost = ({post}) => {
                   />
                 </VStack>
                 <Divider bg="gray.500" my={4} mb="auto" />
-                <PostFooter username="huyngse" isProfilePage/>
+                <PostFooter username="huyngse" isProfilePage />
               </Flex>
             </Flex>
           </ModalBody>
