@@ -45,19 +45,11 @@ function useCreatePost() {
       await updateDoc(postDocRef, { imageURL: downloadURL });
       newPost.imageURL = downloadURL;
 
-      // save post to global posts state
+      // save post to PostStore
       createPost({ ...newPost, id: postDocRef.id });
       // save post to global user's profile state
       addPost({ ...newPost, id: postDocRef.id });
-      // save to local storage
       showToast("Success", "Post created successfully", "success");
-      localStorage.setItem(
-        "userInfo",
-        JSON.stringify({
-          ...authUser,
-          posts: [...authUser.posts, postDocRef.id],
-        })
-      );
     } catch (error) {
       showToast("Error", error.message, "error");
     } finally {
