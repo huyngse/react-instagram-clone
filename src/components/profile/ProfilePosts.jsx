@@ -1,16 +1,11 @@
-import { Box, Grid, Skeleton } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Box, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
 import ProfilePost from "./ProfilePost";
+import useGetUserPosts from "../../hooks/useGetUserPosts";
 
 const ProfilePosts = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        setTimeout(() => {
-            setIsLoading(false);
-        },
-            1000
-        )
-    }, [])
+    const { isLoading, posts } = useGetUserPosts();
+    const noPostsFound = !isLoading && posts.length === 0;
+    if (noPostsFound) return <NoPostsFound />
     return (
         <Grid
             templateColumns={{
@@ -20,31 +15,33 @@ const ProfilePosts = () => {
             gap={1}
         >
             {
-                isLoading && [0, 1, 2, 3].map((item, index) => (
+                isLoading && [0, 1, 2].map((item, index) => (
                     <Skeleton key={index}>
                         <Box h="300px">Content wrapped</Box>
                     </Skeleton>
                 ))
             }
             {
-                !isLoading && (
-                    <>
-                        <ProfilePost
-                            img="/assets/img1.png"
-                        />
-                        <ProfilePost
-                            img="/assets/img2.png"
-                        />
-                        <ProfilePost
-                            img="/assets/img3.png"
-                        />
-                        <ProfilePost
-                            img="/assets/img4.png"
-                        />
-                    </>
-                )
+                !isLoading && posts.map((post) => (
+                    <ProfilePost key={post.id} post={post}/>
+                ))
             }
         </Grid>
     )
 }
 export default ProfilePosts;
+
+const NoPostsFound = () => {
+    return (
+        <Flex
+            flexDir="column"
+            textAlign="center"
+            mx="auto"
+            mt={10}
+        >
+            <Text fontSize="2xl">
+                No Posts Found
+            </Text>
+        </Flex>
+    )
+}

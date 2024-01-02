@@ -3,22 +3,23 @@ import { FaComment, FaHeart } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 import Comment from "../Comment";
 import PostFooter from "../home/PostFooter";
-const ProfilePost = (props) => {
+import useUserProfileStore from "../../store/userProfileStore";
+const ProfilePost = ({post}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const userProfile = useUserProfileStore(state => state.userProfile);
   const CustomModal = () => {
     const Header = () => {
       return (
         <Flex justifyContent="space-between" alignItems="center">
           <Flex alignItems="center" gap={2}>
             <Avatar
-              src="/assets/profilepic.png"
+              src={userProfile.profilePicURL}
               size="sm"
-              name="huyngse"
+              name={userProfile.fullName}
               alt="Profile picture"
             />
             <Text fontSize={12} fontWeight="bold">
-              huyngse
+              {userProfile.username}
             </Text>
           </Flex>
           <Box
@@ -61,7 +62,7 @@ const ProfilePost = (props) => {
                 justifyContent="center"
                 alignItems="center"
               >
-                <Image src={props.img} alt="Profile post picture" />
+                <Image src={post.imageURL} alt="Profile post picture" />
               </Flex>
               <Flex
                 flex={1}
@@ -130,17 +131,17 @@ const ProfilePost = (props) => {
           <Flex alignItems="center" gap={2}>
             <FaHeart />
             <Text>
-              1
+              {post.likes.length}
             </Text>
           </Flex>
           <Flex alignItems="center" gap={2}>
             <FaComment />
             <Text>
-              7
+              {post.comments.length}
             </Text>
           </Flex>
         </Flex>
-        <Image src={props.img} alt="Profile post image" w="full" h="full" objectFit="cover" />
+        <Image src={post.imageURL} alt="Profile post image" w="full" h="full" objectFit="cover" />
       </GridItem>
       <CustomModal />
     </>
