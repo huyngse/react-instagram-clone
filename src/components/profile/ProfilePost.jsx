@@ -114,27 +114,24 @@ const ProfilePost = ({ post }) => {
                 <Header />
                 <Divider bg="gray.500" my={4} />
                 <VStack gap={5} maxH="350px" overflowY="auto">
-                  <Comment
+                  {post.comments.map((comment) => {
+                    return (
+                      <Comment
+                        key={comment.id}
+                        comment={comment}
+                      />
+                    )
+                  })
+                  }
+                  {/* <Comment
                     createdAt="2 days ago"
                     username="huyngse"
                     avatar="/assets/profilepic.png"
                     text="Dummy images from unsplash"
-                  />
-                  <Comment
-                    createdAt="12 hours ago"
-                    username="abrahmov"
-                    avatar="https://bit.ly/dan-abramov"
-                    text="Nice pic"
-                  />
-                  <Comment
-                    createdAt="3 hours ago"
-                    username="kentdodds"
-                    avatar="https://bit.ly/kent-c-dodds"
-                    text="Good clone dude!"
-                  />
+                  /> */}
+
                 </VStack>
-                <Divider bg="gray.500" my={4} mb="auto" />
-                <PostFooter username="huyngse" isProfilePage />
+                <PostFooter isProfilePage post={post}/>
               </Flex>
             </Flex>
           </ModalBody>

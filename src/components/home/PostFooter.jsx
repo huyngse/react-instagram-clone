@@ -3,10 +3,14 @@ import { useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { GoPaperAirplane } from "react-icons/go";
 import { IoChatbubbleOutline } from "react-icons/io5";
-
-const PostFooter = (props) => {
+import usePostComment from "../../hooks/usePostComment";
+import useAuthStore from "../../store/authStore";
+const PostFooter = ({ isProfilePage, username, post }) => {
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(1000);
+    const { isCommenting, handlePostComment } = usePostComment();
+    const [comment, setComment] = useState("");
+    const authUser = useAuthStore(state => state.user);
     const handleLikeClick = () => {
         setLiked(prev => {
             if (liked) {
@@ -16,6 +20,10 @@ const PostFooter = (props) => {
             }
             return !prev;
         })
+    }
+    const handleSubmitComment = async () => {
+        await handlePostComment(post.id, comment);
+        setComment("");
     }
     return (
         <Box padding={2} fontSize={14} >
@@ -34,11 +42,11 @@ const PostFooter = (props) => {
                 {likes} likes
             </Text>
             {
-                !props.isProfilePage && (
+                !isProfilePage && (
                     <>
                         <Flex gap={2}>
                             <Text py={1} fontWeight={700}>
-                                {props.username}
+                                {username}
                             </Text>
                             <Text py={1} fontWeight={500}>
                                 Feeling good
@@ -51,18 +59,32 @@ const PostFooter = (props) => {
 
                 )
             }
-            <InputGroup>
-                <Input type='tel' placeholder='Comment' variant="flushed" />
-                <InputRightElement >
-                    <Button
-                        size='sm'
-                        color="blue.500"
-                        _hover={{ color: "white" }}
-                    >
-                        <GoPaperAirplane />
-                    </Button>
-                </InputRightElement>
-            </InputGroup>
+            {/* COMMENT FORM */}
+            {
+                authUser && (
+                    <InputGroup>
+                        <Input
+                            type='tel'
+                            placeholder='Comment'
+                            variant="flushed"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                        />
+                        <InputRightElement >
+                            {/* SUBMIT COMMENT BUTTON */}
+                            <Button
+                                size='sm'
+                                color="blue.500"
+                                _hover={{ color: "white" }}
+                                isLoading={isCommenting}
+                                onClick={handleSubmitComment}
+                            >
+                                <GoPaperAirplane />
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                )
+            }
         </Box>
     )
 }

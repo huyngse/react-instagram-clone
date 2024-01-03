@@ -12,11 +12,24 @@ const usePostStore = create((set) => {
     deletePost: (id) => {
       set((prev) => {
         return {
-          posts: prev.posts.filter(post => post.id !== id)
+          posts: prev.posts.filter((post) => post.id !== id),
         };
       });
     },
-    // add comment
+    addComment: (postId, comment) =>
+      set((prev) => {
+        return {
+          posts: prev.posts.map((post) => {
+            if (post.id === postId) {
+              return {
+                ...post,
+                comments: [...post.comments, comment],
+              };
+            }
+            return post;
+          }),
+        };
+      }),
     setPosts: (posts) => {
       set({ posts });
     },
