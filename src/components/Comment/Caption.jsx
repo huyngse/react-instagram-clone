@@ -26,7 +26,7 @@ const Caption = ({post}) => {
                     </Link>
                     <Text color="gray">{timeAgo(post.createdAt)}</Text>
                 </Flex>
-                <Text >{post.caption} lorem</Text>
+                <Text >{post.caption}</Text>
             </Box>
         </Flex>
     )

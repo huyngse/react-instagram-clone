@@ -26,7 +26,7 @@ const Comment = ({ comment }) => {
           </Link>
           <Text color="gray">{timeAgo(comment.createdAt)}</Text>
         </Flex>
-        <Text >{comment.comment} lorem</Text>
+        <Text >{comment.comment}</Text>
       </Box>
     </Flex>
   )
