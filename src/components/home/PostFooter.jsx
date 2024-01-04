@@ -5,23 +5,13 @@ import { GoPaperAirplane } from "react-icons/go";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
+import useLikePost from "../../hooks/useLikePost";
 const PostFooter = ({ isProfilePage, username, post }) => {
     const commentRef = useRef(null);
-    const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(1000);
     const { isCommenting, handlePostComment } = usePostComment();
     const [comment, setComment] = useState("");
     const authUser = useAuthStore(state => state.user);
-    const handleLikeClick = () => {
-        setLiked(prev => {
-            if (liked) {
-                setLikes(likes - 1);
-            } else {
-                setLikes(likes + 1);
-            }
-            return !prev;
-        })
-    }
+    const { likes, isLiked, handleLikePost} = useLikePost(post);
     const handleSubmitComment = async () => {
         await handlePostComment(post.id, comment);
         setComment("");
@@ -31,10 +21,10 @@ const PostFooter = ({ isProfilePage, username, post }) => {
             <Flex gap={3} py={1} fontSize={25}>
                 {/* LIKE BUTTON */}
                 <Box
-                    onClick={handleLikeClick}
+                    onClick={handleLikePost}
                     cursor="pointer"
                 >
-                    {liked ? <FaHeart color="red" /> : <FaRegHeart />}
+                    {isLiked ? <FaHeart color="red" /> : <FaRegHeart />}
                 </Box>
                 {/* COMMENT BUTTON */}
                 <Box cursor="pointer" onClick={
