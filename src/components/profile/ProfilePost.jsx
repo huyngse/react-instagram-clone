@@ -1,7 +1,7 @@
 import { Avatar, Button, Divider, Flex, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, VStack, useDisclosure } from "@chakra-ui/react"
 import { FaComment, FaHeart } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
-import Comment from "../Comment";
+import Comment from "../Comment/Comment";
 import PostFooter from "../home/PostFooter";
 import useUserProfileStore from "../../store/userProfileStore";
 import useAuthStore from "../../store/authStore";
@@ -11,6 +11,7 @@ import { deleteObject, ref } from "firebase/storage";
 import { firestore, storage } from "../../firebase/firebase";
 import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import usePostStore from "../../store/postStore";
+import Caption from "../Comment/Caption";
 const ProfilePost = ({ post }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const userProfile = useUserProfileStore(state => state.userProfile);
@@ -113,7 +114,11 @@ const ProfilePost = ({ post }) => {
               >
                 <Header />
                 <Divider bg="gray.500" my={4} />
+                {/* COMMENT SECTION */}
                 <VStack gap={5} maxH="350px" overflowY="auto">
+                  {
+                    post.caption && <Caption post={post} />
+                  }
                   {post.comments.map((comment) => {
                     return (
                       <Comment
@@ -123,15 +128,8 @@ const ProfilePost = ({ post }) => {
                     )
                   })
                   }
-                  {/* <Comment
-                    createdAt="2 days ago"
-                    username="huyngse"
-                    avatar="/assets/profilepic.png"
-                    text="Dummy images from unsplash"
-                  /> */}
-
                 </VStack>
-                <PostFooter isProfilePage post={post}/>
+                <PostFooter isProfilePage post={post} />
               </Flex>
             </Flex>
           </ModalBody>

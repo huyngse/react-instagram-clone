@@ -1,7 +1,7 @@
 import { Avatar, Box, Flex, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react";
-import useGetUserProfileById from "../hooks/useGetUserProfileById";
+import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { Link } from "react-router-dom";
-import { timeAgo } from "../utils/timeAgo";
+import { timeAgo } from "../../utils/timeAgo";
 const Comment = ({ comment }) => {
   const { isLoading, userProfile } = useGetUserProfileById(comment.createdBy);
   if (isLoading) return <CommentSkeleton />
@@ -28,7 +28,6 @@ const Comment = ({ comment }) => {
         </Flex>
         <Text >{comment.comment} lorem</Text>
       </Box>
-
     </Flex>
   )
 }

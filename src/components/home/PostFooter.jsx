@@ -1,11 +1,12 @@
 import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { GoPaperAirplane } from "react-icons/go";
 import { IoChatbubbleOutline } from "react-icons/io5";
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 const PostFooter = ({ isProfilePage, username, post }) => {
+    const commentRef = useRef(null);
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(1000);
     const { isCommenting, handlePostComment } = usePostComment();
@@ -28,13 +29,19 @@ const PostFooter = ({ isProfilePage, username, post }) => {
     return (
         <Box padding={2} fontSize={14} >
             <Flex gap={3} py={1} fontSize={25}>
+                {/* LIKE BUTTON */}
                 <Box
                     onClick={handleLikeClick}
                     cursor="pointer"
                 >
                     {liked ? <FaHeart color="red" /> : <FaRegHeart />}
                 </Box>
-                <Box cursor="pointer">
+                {/* COMMENT BUTTON */}
+                <Box cursor="pointer" onClick={
+                    () => {
+                        commentRef.current.focus();
+                    }
+                }>
                     <IoChatbubbleOutline />
                 </Box>
             </Flex>
@@ -69,6 +76,7 @@ const PostFooter = ({ isProfilePage, username, post }) => {
                             variant="flushed"
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
+                            ref={commentRef}
                         />
                         <InputRightElement >
                             {/* SUBMIT COMMENT BUTTON */}
