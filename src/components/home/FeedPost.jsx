@@ -1,9 +1,12 @@
-import { Avatar, Box, Flex, Image, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react"
+import { Avatar, Box, Button, Flex, Image, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react"
 import PostFooter from "./PostFooter";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { timeAgo } from "../../utils/timeAgo";
 import { Link } from "react-router-dom";
+import useFollowUser from "../../hooks/useFollowUser";
 const PostHeader = ({ post, creatorProfile }) => {
+    const { isUpdating, isFollowing, handleFollowUser } = useFollowUser(creatorProfile?.uid);
+
     return (
         <Flex
             justifyContent="space-between"
@@ -35,23 +38,27 @@ const PostHeader = ({ post, creatorProfile }) => {
                             </Text>
                         </Link>
                     ) : (
-                       <Skeleton w="100px" h="10px"/>
+                        <Skeleton w="100px" h="10px" />
                     )
                 }
                 <Text color="gray.500">
                     • {timeAgo(post.createdAt)}
                 </Text>
             </Flex>
-            <Box cursor="pointer">
-                <Text
-                    color="blue.500"
-                    fontWeight="bold"
-                    _hover={{ color: "white" }}
-                    transition="0.2s"
-                >
-                    Unfollow
-                </Text>
-            </Box>
+            <Button
+                bg="transparent"
+                color="blue.500"
+                fontWeight="bold"
+                _hover={{ color: "white" }}
+                transition="0.2s"
+                size="sm"
+                onClick={handleFollowUser}
+                isLoading={isUpdating}
+            >
+                {
+                    isFollowing ? "Unfollow" : "Follow"
+                }
+            </Button>
         </Flex>
     )
 }
@@ -63,7 +70,7 @@ const FeedPost = ({ post }) => {
             <Box>
                 <Image src={post.imageURL} alt="feed post image" borderRadius={5} />
             </Box>
-            <PostFooter username={userProfile?.username} post={post}/>
+            <PostFooter username={userProfile?.username} post={post} />
         </Box>
     )
 }
