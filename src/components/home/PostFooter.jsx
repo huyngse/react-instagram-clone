@@ -11,7 +11,7 @@ const PostFooter = ({ isProfilePage, username, post }) => {
     const { isCommenting, handlePostComment } = usePostComment();
     const [comment, setComment] = useState("");
     const authUser = useAuthStore(state => state.user);
-    const { likes, isLiked, handleLikePost} = useLikePost(post);
+    const { likes, isLiked, handleLikePost } = useLikePost(post);
     const handleSubmitComment = async () => {
         await handlePostComment(post.id, comment);
         setComment("");
@@ -49,11 +49,14 @@ const PostFooter = ({ isProfilePage, username, post }) => {
                                 Feeling good
                             </Text>
                         </Flex>
-                        <Text py={1} color='gray'>
-                            View all 10 comment
-                        </Text>
+                        {
+                            post.comments.length > 0 && (
+                                <Text py={1} color='gray'>
+                                    View all {post.comments.length} comment
+                                </Text>
+                            )
+                        }
                     </>
-
                 )
             }
             {/* COMMENT FORM */}

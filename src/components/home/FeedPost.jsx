@@ -1,9 +1,9 @@
-import { Avatar, Box, Flex, Image, Text } from "@chakra-ui/react"
+import { Avatar, Box, Flex, Image, Skeleton, SkeletonCircle, Text } from "@chakra-ui/react"
 import PostFooter from "./PostFooter";
 import useGetUserProfileById from "../../hooks/useGetUserProfileById";
 import { timeAgo } from "../../utils/timeAgo";
+import { Link } from "react-router-dom";
 const PostHeader = ({ post, creatorProfile }) => {
-    if (!creatorProfile) return;
     return (
         <Flex
             justifyContent="space-between"
@@ -11,15 +11,33 @@ const PostHeader = ({ post, creatorProfile }) => {
             p={2}
         >
             <Flex gap={2} alignItems="center"  >
-                <Avatar
-                    src={creatorProfile.profilePicURL}
-                    alt={`${creatorProfile.username}'s profile picture`}
-                    size="sm"
-                    name={creatorProfile.fullName}
-                />
-                <Text fontWeight="bold">
-                    {creatorProfile.username}
-                </Text>
+                {/* PROFILE PICTURE */}
+                {
+                    creatorProfile ? (
+                        <Link to={`/u/${creatorProfile.username}`}>
+                            <Avatar
+                                src={creatorProfile.profilePicURL}
+                                alt={`${creatorProfile.username}'s profile picture`}
+                                size="sm"
+                                name={creatorProfile.fullName}
+                            />
+                        </Link>
+                    ) : (
+                        <SkeletonCircle size="10" />
+                    )
+                }
+                {/* USERNAME */}
+                {
+                    creatorProfile ? (
+                        <Link to={`/u/${creatorProfile.username}`}>
+                            <Text fontWeight="bold">
+                                {creatorProfile.username}
+                            </Text>
+                        </Link>
+                    ) : (
+                       <Skeleton w="100px" h="10px"/>
+                    )
+                }
                 <Text color="gray.500">
                     • {timeAgo(post.createdAt)}
                 </Text>
@@ -45,7 +63,7 @@ const FeedPost = ({ post }) => {
             <Box>
                 <Image src={post.imageURL} alt="feed post image" borderRadius={5} />
             </Box>
-            {/* <PostFooter username={props.username} /> */}
+            <PostFooter username={userProfile?.username} post={post}/>
         </Box>
     )
 }
