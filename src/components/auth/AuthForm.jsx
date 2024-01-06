@@ -1,6 +1,6 @@
 import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
-import Login from "./login";
+import Login from "./Login";
 import Signup from "./SignUp";
 import GoogleAuth from "./GoogleAuth";
 
