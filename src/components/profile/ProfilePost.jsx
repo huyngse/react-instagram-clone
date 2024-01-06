@@ -129,7 +129,7 @@ const ProfilePost = ({ post }) => {
                   })
                   }
                 </VStack>
-                <PostFooter isProfilePage post={post} />
+                <PostFooter isProfilePage post={post} creatorProfile={userProfile}/>
               </Flex>
             </Flex>
           </ModalBody>

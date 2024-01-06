@@ -6,7 +6,8 @@ import { IoChatbubbleOutline } from "react-icons/io5";
 import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
-const PostFooter = ({ isProfilePage, username, post }) => {
+import { timeAgo } from "../../utils/timeAgo";
+const PostFooter = ({ isProfilePage, creatorProfile, post }) => {
     const commentRef = useRef(null);
     const { isCommenting, handlePostComment } = usePostComment();
     const [comment, setComment] = useState("");
@@ -16,6 +17,7 @@ const PostFooter = ({ isProfilePage, username, post }) => {
         await handlePostComment(post.id, comment);
         setComment("");
     }
+    if (!creatorProfile) return;
     return (
         <Box padding={2} fontSize={14} >
             <Flex gap={3} py={1} fontSize={25}>
@@ -39,19 +41,26 @@ const PostFooter = ({ isProfilePage, username, post }) => {
                 {likes} likes
             </Text>
             {
+                isProfilePage && (
+                    <Text color="gray" fontSize="12">
+                        Posted {timeAgo(post.createdAt)}
+                    </Text>
+                )
+            }
+            {
                 !isProfilePage && (
                     <>
                         <Flex gap={2}>
                             <Text py={1} fontWeight={700}>
-                                {username}
+                                {creatorProfile.username}
                             </Text>
                             <Text py={1} fontWeight={500}>
-                                Feeling good
+                                {post.caption}
                             </Text>
                         </Flex>
                         {
                             post.comments.length > 0 && (
-                                <Text py={1} color='gray'>
+                                <Text py={1} color='gray' cursor="pointer">
                                     View all {post.comments.length} comment
                                 </Text>
                             )

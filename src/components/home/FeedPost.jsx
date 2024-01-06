@@ -70,7 +70,7 @@ const FeedPost = ({ post }) => {
             <Box>
                 <Image src={post.imageURL} alt="feed post image" borderRadius={5} />
             </Box>
-            <PostFooter username={userProfile?.username} post={post} />
+            <PostFooter creatorProfile={userProfile} post={post} />
         </Box>
     )
 }
