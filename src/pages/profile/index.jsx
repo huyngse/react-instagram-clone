@@ -20,12 +20,16 @@ const ProfilePage = () => {
           !isLoading && userProfile && <ProfileHeader />
         }
         {
-          isLoading && <ProfileHeaderSkeleton/>
+          isLoading && <ProfileHeaderSkeleton />
         }
       </Flex>
       <Box>
-        <ProfileTabs />
-        <ProfilePosts />
+        {
+          !isLoading && (<>
+            <ProfileTabs />
+            <ProfilePosts />
+          </>)
+        }
       </Box>
     </Container>
   )
