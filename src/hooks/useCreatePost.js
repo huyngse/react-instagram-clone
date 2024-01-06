@@ -3,7 +3,7 @@ import useShowToast from "./useShowToast";
 import useAuthStore from "../store/authStore";
 import usePostStore from "../store/postStore";
 import useUserProfileStore from "../store/userProfileStore";
-// import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   addDoc,
   arrayUnion,
@@ -18,9 +18,10 @@ function useCreatePost() {
   const showToast = useShowToast();
   const [isLoading, setIsLoading] = useState(false);
   const authUser = useAuthStore((state) => state.user);
+  const userProfile = useUserProfileStore((state) => state.userProfile);
   const createPost = usePostStore((state) => state.createPost);
   const addPost = useUserProfileStore((state) => state.addPost);
-//   const { pathname } = useLocation();
+  const { pathname } = useLocation();
 
   const handleCreatePost = async (caption, selectedFile) => {
     if (isLoading) {
@@ -46,9 +47,13 @@ function useCreatePost() {
       newPost.imageURL = downloadURL;
 
       // save post to PostStore
-      createPost({ ...newPost, id: postDocRef.id });
+      if (userProfile.uid === authUser.uid) {
+        createPost({ ...newPost, id: postDocRef.id });
+      }
       // save post to global user's profile state
-      addPost({ ...newPost, id: postDocRef.id });
+      if (pathname !== "/" && userProfile.uid === authUser.uid) {
+        addPost({ ...newPost, id: postDocRef.id });
+      }
       showToast("Success", "Post created successfully", "success");
     } catch (error) {
       showToast("Error", error.message, "error");
