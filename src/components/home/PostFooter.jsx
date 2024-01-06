@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text, useDisclosure } from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { GoPaperAirplane } from "react-icons/go";
@@ -7,8 +7,10 @@ import usePostComment from "../../hooks/usePostComment";
 import useAuthStore from "../../store/authStore";
 import useLikePost from "../../hooks/useLikePost";
 import { timeAgo } from "../../utils/timeAgo";
+import CommentsModal from "../Modals/CommentsModal";
 const PostFooter = ({ isProfilePage, creatorProfile, post }) => {
     const commentRef = useRef(null);
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const { isCommenting, handlePostComment } = usePostComment();
     const [comment, setComment] = useState("");
     const authUser = useAuthStore(state => state.user);
@@ -60,9 +62,14 @@ const PostFooter = ({ isProfilePage, creatorProfile, post }) => {
                         </Flex>
                         {
                             post.comments.length > 0 && (
-                                <Text py={1} color='gray' cursor="pointer">
+                                <Text py={1} color='gray' cursor="pointer" onClick={onOpen}>
                                     View all {post.comments.length} comment
                                 </Text>
+                            )
+                        }
+                        {
+                            isOpen && (
+                                <CommentsModal isOpen={isOpen} onClose={onClose} post={post}/>
                             )
                         }
                     </>

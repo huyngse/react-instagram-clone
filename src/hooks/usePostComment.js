@@ -10,6 +10,7 @@ const usePostComment = () => {
   const showToast = useShowToast();
   const authUser = useAuthStore((state) => state.user);
   const addComment = usePostStore(state => state.addComment);
+  
   const handlePostComment = async (postId, comment) => {
     if (isCommenting) return;
     if (!authUser)
